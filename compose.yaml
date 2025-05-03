@@ -1,6 +1,19 @@
 services:
-  microservice-template:
-    build: .
+  bsuir-helper-embedder:
+    build:
+      context: .
+      dockerfile: Dockerfile.${EMBEDDER_DEVICE:-cpu}
+      args:
+        - EMBEDDER_DEVICE=${EMBEDDER_DEVICE:-cpu}
+    image: bsuir-helper-embedder:${EMBEDDER_DEVICE:-cpu}
+    env_file:
+      - .env
     ports:
-      # You can take any port you like instead of 8080 in your network
-      - "8080:8000"
+      - "8081:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: ${GPU_COUNT:-0}
+              capabilities: [gpu]
