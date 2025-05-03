@@ -15,6 +15,10 @@ jobs:
         runs-on: ubuntu-latest
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
+        strategy:
+          matrix:
+            variant: ["cpu", "cuda"]
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -35,14 +39,14 @@ jobs:
                 tag-sha: "sha-{{ .Commit }}"
                 tag-edge: "latest"
 
-            - name: Build and push Docker image
+            - name: Build and push ${{ matrix.variant }} image
               uses: docker/build-push-action@v6
               with:
                 context: .
-                file: ./Dockerfile
+                file: ./Dockerfile.${{ matrix.variant }}
                 push: true
                 tags: |
-                  ${{ steps.meta.outputs.tags }}
-                  ghcr.io/${{ github.repository }}:latest
-                  ghcr.io/${{ github.repository }}:${{ github.sha }}
+                  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.variant }}
+                  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.variant }}-${{ github.sha }}
+                  ${{ matrix.variant == 'cpu' && env.REGISTRY + '/' + env.IMAGE_NAME + ':latest' }}
                 visibility: public

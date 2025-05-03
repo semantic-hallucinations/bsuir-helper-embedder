@@ -1,5 +1,2 @@
-fastapi
-uvicorn
-pydantic
-requests
-httpx
+-r requirements-base.txt
+-r requirements-cpu.txt

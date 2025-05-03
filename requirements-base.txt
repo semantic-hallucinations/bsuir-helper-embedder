@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pydantic
+requests
+httpx
+tenacity
+organisation_utils @ git+https://github.com/semantic-hallucinations/semantic-hallucinations-utils.git
