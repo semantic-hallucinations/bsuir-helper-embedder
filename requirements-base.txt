@@ -4,4 +4,4 @@ pydantic
 requests
 httpx
 tenacity
-organisation_utils @ git+https://github.com/semantic-hallucinations/semantic-hallucinations-utils.git
+organisation_utils @ https://github.com/semantic-hallucinations/semantic-hallucinations-utils/archive/refs/heads/main.zip
