@@ -53,3 +53,10 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ matrix.variant }}
             ghcr.io/${{ github.repository }}:${{ matrix.variant }}-${{ github.sha }}
           visibility: public
+
+      - name: Tag & push “latest” for CPU
+        if: ${{ matrix.variant == 'cpu' }}
+        run: |
+          docker pull ghcr.io/${{ github.repository }}:cpu
+          docker tag ghcr.io/${{ github.repository }}:cpu ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}:latest
