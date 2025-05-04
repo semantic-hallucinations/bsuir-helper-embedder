@@ -9,7 +9,7 @@ RUN apt-get update && \
     ln -sf /usr/bin/pip3 /usr/bin/pip && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -y curl
+RUN apt-get update && apt-get install -y curl
 
 ARG EMBEDDER_DEVICE=cuda
 COPY requirements-base.txt requirements-${EMBEDDER_DEVICE}.txt ./
