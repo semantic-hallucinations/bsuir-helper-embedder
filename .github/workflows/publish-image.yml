@@ -52,5 +52,4 @@ jobs:
             ${{ steps.meta.outputs.tags }}
             ghcr.io/${{ github.repository }}:${{ matrix.variant }}
             ghcr.io/${{ github.repository }}:${{ matrix.variant }}-${{ github.sha }}
-            ${{ matrix.variant == 'cpu' && format('ghcr.io/{0}:latest', github.repository) }}
           visibility: public
