@@ -17,11 +17,14 @@ jobs:
 
     strategy:
       matrix:
-        variant: ["cpu", "cuda"]
+        variant: ["cuda", "cpu"]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Logout from Docker Hub
+        run: docker logout https://index.docker.io/v1/
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
@@ -46,6 +49,7 @@ jobs:
           file: ./Dockerfile.${{ matrix.variant }}
           push: true
           tags: |
-            ${{ format('{0}/{1}:{2}', env.REGISTRY, env.IMAGE_NAME, matrix.variant) }}
-            ${{ format('{0}/{1}:{2}-{3}', env.REGISTRY, env.IMAGE_NAME, matrix.variant, github.sha) }}
-            ${{ matrix.variant == 'cpu' && format('{0}/{1}:latest', env.REGISTRY, env.IMAGE_NAME) }}
+            ${{ steps.meta.outputs.tags }}
+            ghcr.io/${{ github.repository }}:${{ matrix.variant }}
+            ghcr.io/${{ github.repository }}:${{ matrix.variant }}-${{ github.sha }}
+          visibility: public
