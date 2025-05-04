@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        variant: ["cuda", "cpu"]
+        variant: ["cpu", "cuda"]
 
     steps:
       - name: Checkout code
