@@ -1,36 +1,66 @@
-# microservice-template
-Template repository for microservice creation
+# Embedder for BSUIR RAG Assistant
+A repository of the embedder for BSUIR RAG Assistant
 
-## Structure:
-- pre-commit config
-- ci config
-- cd config
-- basic service
+## Endpoints
 
-## Basic usage
+### ```/health```
+Basic health check that returns ```200 OK``` if service is running
 
-CI runs on every push/pull to main branch, to check your changes llocally use pre-commit
-CD runs if CI on main branch finishes succesfully(for organisation)
+### ```/embed```
+This endpoint processes chunks and returns embeddings as ```List[List[float]]```
+* __Request .json structure:__
+```json
+ {
+  "chunks": <chunks>,
+ }
+```
+* __Response .json structure:__
+```json
+  {
+    "embeddings": <processed_embeddings>
+  }
+```
 
-## Pre-commit
+## IMPORTANT
 
-### To run pre-commit locally for ci checkouts:
-1. ```pip install pre-commit```
-2. ```pre-commit install```
-3. ```pre-commit run -a```
+This service actually has 2 working images, for CPU and for GPU, and the requirements for your system differ for this two images.
 
-### !!!Warning!!!
-Pre-commit runs only on files that added to git by ```git add```
+### Requirements for CPU-based embedder:
+
+* At least 10GB free storage space
+
+* At least 8GB RAM
+
+### Requirements for GPU-based embedder:
+
+* The NVIDIA GPU with at least 4GB Video Memory
+
+* At least 8GB RAM
+
+* At least 30GB free storage space
+
+__*Warning*__ : This requirements data was specified by actually testing the [BAAI/bge-m3](https://huggingface.co/BAAI/bge-m3) model. For more detailed information, please refer to the provided link for the model itself.
+
+__The model was tested on HP Victus 16 with the following specs (both CPU and GPU images)__ :
+* NVIDIA GeForce RTX 3050 (4GB)
+* AMD Ryzen 5 5600H
+* 8 GB RAM
 
 ## Local running
 ```docker compose up --build``` and run example.py
 
-## Chech publication history
-You can check publishing history in organisation -> packages
-
 ## Using docker image
-```
+
+### Image for CPU
+```yaml
 services:
-  microservice:
-    image: ghcr.io/semantic-hallucinations/py-microservice-template:latest   # or commit sha, or tag name instead of <latest>
+  bsuir-helper-embedder:
+    image: ghcr.io/semantic-hallucinations/bsuir-helper-embedder:latest
+```
+
+### Image for GPU
+```yaml
+services:
+  bsuir-helper-embedder:
+    image: ghcr.io/semantic-hallucinations/bsuir-helper-embedder:cuda
 ```
